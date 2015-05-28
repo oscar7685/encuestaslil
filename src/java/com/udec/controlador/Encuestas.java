@@ -570,6 +570,51 @@ public class Encuestas extends HttpServlet {
                     out.close();
                 }
 
+            } else if (accion.equals("resultadosP3")) {
+                response.setContentType("application/json");
+
+                String preguntaid = (String) request.getParameter("preguntaid");
+                int indicePregunta = Integer.parseInt(preguntaid);
+                List<List<String>> aux = (List<List<String>>) sesion.getAttribute("cantidadXrespuestaXPregunta");
+                List<List<String>> aux6 = (List<List<String>>) sesion.getAttribute("cantidadXrespuestaXPregunta6");
+                List<Pregunta> preg = (List<Pregunta>) sesion.getAttribute("preguntas");
+
+                String aux4 = "{ \"datos\":[";
+
+                try {
+                    for (int i = 0; i < preg.get(indicePregunta).getRespuestaList().size(); i++) {
+                        if (!preg.get(indicePregunta).getTipo().equals("6")) {
+                            String aux5 = ""
+                                    + "["
+                                    +"\"" + preg.get(indicePregunta).getRespuestaList()
+                                    .get(i).getRespuesta().trim()
+                                    + "\" ,"  + aux.get(indicePregunta).get(i)
+                                    + ""
+                                    + "],"
+                                    + "";
+                            aux4 += aux5;
+                        } else {
+                            String aux5 = ""
+                                    + "["
+                                    + "\"" +  preg.get(indicePregunta).getRespuestaList()
+                                    .get(i).getRespuesta().trim()
+                                    + "\" ," + aux6.get(indicePregunta).get(i)
+                                    + ""
+                                    + "],"
+                                    + "";
+                            aux4 += aux5;
+                        }
+
+                    }
+                    aux4 = aux4.substring(0, aux4.length() - 1);
+                    aux4 += "]}";
+
+                    out.println("[" + aux4 + "]");
+
+                } finally {
+                    out.close();
+                }
+
             } else if (accion.equals("resultadosP2")) {
                 response.setContentType("application/json");
 
@@ -579,7 +624,6 @@ public class Encuestas extends HttpServlet {
                 List<List<String>> aux6 = (List<List<String>>) sesion.getAttribute("cantidadXrespuestaXPregunta6");
                 List<Pregunta> preg = (List<Pregunta>) sesion.getAttribute("preguntas");
 
-                
                 String aux4 = "{ \"datos\":[{\"categorias\":[";
 
                 try {

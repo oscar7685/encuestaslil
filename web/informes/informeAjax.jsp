@@ -27,6 +27,9 @@
                                                         </c:when>
                                                     </c:choose>
                                                 </div>
+                                                <div id="di2v${pregunta.idpregunta}">
+
+                                                </div>
                                                 <div>
                                                     <c:choose>
                                                         <c:when test="${pregunta.getTipo() == '1'}">
@@ -99,7 +102,7 @@
                                                                 </c:forEach>
                                                             </table>   
 
-                                                           No Personas: ${cantidadPersonasXpregunta.get(iter.index)}
+                                                             No Personas: ${cantidadPersonasXpregunta.get(iter.index)}
                                                         </c:when> 
                                                     </c:choose>
                                                 </div>    
@@ -143,58 +146,240 @@
 
 
 <script type="text/javascript">
-    var datosTF1vsTF2, datos9, datos1, datos6;
+    var datosTF1vsTF2, datos9, datos1, datos6, datos0, categorias0, series3, categorias3;
     $(function() {
-
     <c:forEach items="${preguntas}" var="pregunta" varStatus="iter">
         <c:choose>
             <c:when test="${pregunta.getTipo() == '0'}">
         $.ajax({
             type: "POST",
-            url: 'Encuestas?accion=resultadosP&preguntaid=${iter.index}',
+            url: 'Encuestas?accion=resultadosP2&preguntaid=${iter.index}',
             dataType: 'json',
             success: function(dat)
             {
-                datosTF1vsTF2 = dat['0']["datos"];
-                Morris.Bar({
-                    element: 'div${pregunta.idpregunta}',
-                    data: datosTF1vsTF2,
-                    hoverCallback: function(index, options, content) {
-                        return(content);
-                    },
-                    xkey: 'y',
-                    ykeys: ['a'],
-                    labels: ['Cantidad de respuestas contestadas'],
-                    //xLabelAngle: 30,
-                    //padding: 100,
-                    lineColors: [Utility.getBrandColor('inverse'), Utility.getBrandColor('midnightblue')]
+                categorias0 = dat['0']["datos"]["0"]["categorias"];
+                datos0 = dat['0']["datos"]["0"]["series"];
+                var chart;
+                $(document).ready(function() {
+                    chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'div${pregunta.idpregunta}',
+                            type: 'column',
+                            margin: [50, 30, 100, 50]
+                        },
+                        title: {
+                            text: '${pregunta.pregunta}'
+                        },
+                        xAxis: {
+                            categories: categorias0,
+                            labels: {
+                                style: {
+                                    fontSize: '12px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Cantidad por respuestas'
+                            }
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0,
+                                dataLabels: {
+                                    enabled: true,
+                                    color: "#4572A7",
+                                    style: {
+                                        fontWeight: 'bold'
+                                    },
+                                    formatter: function() {
+                                        return this.y + '';
+                                    }
+                                }
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                                name: 'repuestas',
+                                data: datos0
+
+                            }]
+                    });
                 });
             } //fin success
         }); //fin del $.ajax
 
+
+        $.ajax({
+            type: "POST",
+            url: 'Encuestas?accion=resultadosP3&preguntaid=${iter.index}',
+            dataType: 'json',
+            success: function(dat)
+            {
+                categorias3 = dat['0']["datos"];
+                chart2 = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'di2v${pregunta.idpregunta}',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+
+                    },
+                    title: {
+                        text: '${pregunta.pregunta}'
+                    },
+                    tooltip: {
+                        formatter: function() {
+                            return '' +
+                                    this.point.name + ': ' + this.y + ' ';
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                color: '#000000',
+                                connectorColor: '#000000',
+                                formatter: function() {
+                                    var igv = this.percentage;
+                                    igv = igv.toFixed(2);
+                                    return '<b>' + this.point.name + '</b>: ' + igv + ' %';
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                            type: 'pie',
+                            name: 'respuestas',
+                            data: categorias3
+                        }]
+
+
+                });
+            } //fin success
+        }); //fin del $.ajax
 
             </c:when>
             <c:when test="${pregunta.getTipo() == '9'}">
         $.ajax({
             type: "POST",
-            url: 'Encuestas?accion=resultadosP&preguntaid=${iter.index}',
+            url: 'Encuestas?accion=resultadosP2&preguntaid=${iter.index}',
             dataType: 'json',
             success: function(dat)
             {
-                datos9 = dat['0']["datos"];
-                Morris.Bar({
-                    element: 'div${pregunta.idpregunta}',
-                    data: datos9,
-                    xkey: 'y',
-                    ykeys: ['a'],
-                    labels: ['Cantidad de respuestas contestadas'],
-                    //xLabelAngle: 30,
-                    //padding: 100,
-                    lineColors: [Utility.getBrandColor('inverse'), Utility.getBrandColor('midnightblue')]
+                categorias0 = dat['0']["datos"]["0"]["categorias"];
+                datos0 = dat['0']["datos"]["0"]["series"];
+                var chart;
+                $(document).ready(function() {
+                    chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'div${pregunta.idpregunta}',
+                            type: 'column',
+                            margin: [50, 30, 100, 50]
+                        },
+                        title: {
+                            text: '${pregunta.pregunta}'
+                        },
+                        xAxis: {
+                            categories: categorias0,
+                            labels: {
+                                style: {
+                                    fontSize: '12px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Cantidad por respuestas'
+                            }
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0,
+                                dataLabels: {
+                                    enabled: true,
+                                    color: "#4572A7",
+                                    style: {
+                                        fontWeight: 'bold'
+                                    },
+                                    formatter: function() {
+                                        return this.y + '';
+                                    }
+                                }
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                                name: 'repuestas',
+                                data: datos0
+
+                            }]
+                    });
                 });
             } //fin success
         }); //fin del $.ajax
 
+        $.ajax({
+            type: "POST",
+            url: 'Encuestas?accion=resultadosP3&preguntaid=${iter.index}',
+            dataType: 'json',
+            success: function(dat)
+            {
+                categorias3 = dat['0']["datos"];
+
+                chart2 = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'di2v${pregunta.idpregunta}',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+
+                    },
+                    title: {
+                        text: '${pregunta.pregunta}'
+                    },
+                    tooltip: {
+                        formatter: function() {
+                            return '' +
+                                    this.point.name + ': ' + this.y + ' ';
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                color: '#000000',
+                                connectorColor: '#000000',
+                                formatter: function() {
+                                    var igv = this.percentage;
+                                    igv = igv.toFixed(2);
+                                    return '<b>' + this.point.name + '</b>: ' + igv + ' %';
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                            type: 'pie',
+                            name: 'respuestas',
+                            data: categorias3
+                        }]
+
+
+                });
+            } //fin success
+        }); //fin del $.ajax
 
             </c:when>
 
@@ -202,20 +387,115 @@
             <c:when test="${pregunta.getTipo() == '1'}">
         $.ajax({
             type: "POST",
-            url: 'Encuestas?accion=resultadosP&preguntaid=${iter.index}',
+            url: 'Encuestas?accion=resultadosP2&preguntaid=${iter.index}',
             dataType: 'json',
             success: function(dat)
             {
-                datos1 = dat['0']["datos"];
-                Morris.Bar({
-                    element: 'div${pregunta.idpregunta}',
-                    data: datos1,
-                    xkey: 'y',
-                    ykeys: ['a'],
-                    //padding: 100,
-                    labels: ['Cantidad de respuestas contestadas'],
-                    //xLabelAngle: 30,
-                    lineColors: [Utility.getBrandColor('inverse'), Utility.getBrandColor('midnightblue')]
+                categorias0 = dat['0']["datos"]["0"]["categorias"];
+                datos0 = dat['0']["datos"]["0"]["series"];
+                var chart;
+                $(document).ready(function() {
+                    chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'div${pregunta.idpregunta}',
+                            type: 'column',
+                            margin: [50, 30, 100, 50]
+                        },
+                        title: {
+                            text: '${pregunta.pregunta}'
+                        },
+                        xAxis: {
+                            categories: categorias0,
+                            labels: {
+                                style: {
+                                    fontSize: '12px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Cantidad por respuestas'
+                            }
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0,
+                                dataLabels: {
+                                    enabled: true,
+                                    color: "#4572A7",
+                                    style: {
+                                        fontWeight: 'bold'
+                                    },
+                                    formatter: function() {
+                                        return this.y + '';
+                                    }
+                                }
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                                name: 'repuestas',
+                                data: datos0
+
+                            }]
+                    });
+                });
+            } //fin success
+        }); //fin del $.ajax
+
+
+        $.ajax({
+            type: "POST",
+            url: 'Encuestas?accion=resultadosP3&preguntaid=${iter.index}',
+            dataType: 'json',
+            success: function(dat)
+            {
+                categorias3 = dat['0']["datos"];
+
+                chart2 = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'di2v${pregunta.idpregunta}',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+
+                    },
+                    title: {
+                        text: '${pregunta.pregunta}'
+                    },
+                    tooltip: {
+                        formatter: function() {
+                            return '' +
+                                    this.point.name + ': ' + this.y + ' ';
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                color: '#000000',
+                                connectorColor: '#000000',
+                                formatter: function() {
+                                    var igv = this.percentage;
+                                    igv = igv.toFixed(2);
+                                    return '<b>' + this.point.name + '</b>: ' + igv + ' %';
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                            type: 'pie',
+                            name: 'respuestas',
+                            data: categorias3
+                        }]
+
+
                 });
             } //fin success
         }); //fin del $.ajax
@@ -226,20 +506,115 @@
             <c:when test="${pregunta.getTipo() == '6'}">
         $.ajax({
             type: "POST",
-            url: 'Encuestas?accion=resultadosP&preguntaid=${iter.index}',
+            url: 'Encuestas?accion=resultadosP2&preguntaid=${iter.index}',
             dataType: 'json',
             success: function(dat)
             {
-                datos6 = dat['0']["datos"];
-                Morris.Bar({
-                    element: 'div${pregunta.idpregunta}',
-                    data: datos6,
-                    xkey: 'y',
-                    ykeys: ['a'],
-                    //padding: 100,
-                    labels: ['Cantidad de respuestas contestadas'],
-                    //xLabelAngle: 30,
-                    lineColors: [Utility.getBrandColor('inverse'), Utility.getBrandColor('midnightblue')]
+                categorias0 = dat['0']["datos"]["0"]["categorias"];
+                datos0 = dat['0']["datos"]["0"]["series"];
+                var chart;
+                $(document).ready(function() {
+                    chart = new Highcharts.Chart({
+                        chart: {
+                            renderTo: 'div${pregunta.idpregunta}',
+                            type: 'column',
+                            margin: [50, 30, 100, 50]
+                        },
+                        title: {
+                            text: '${pregunta.pregunta}'
+                        },
+                        xAxis: {
+                            categories: categorias0,
+                            labels: {
+                                style: {
+                                    fontSize: '12px',
+                                    fontFamily: 'Verdana, sans-serif'
+                                }
+                            }
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Cantidad por respuestas'
+                            }
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0,
+                                dataLabels: {
+                                    enabled: true,
+                                    color: "#4572A7",
+                                    style: {
+                                        fontWeight: 'bold'
+                                    },
+                                    formatter: function() {
+                                        return this.y + '';
+                                    }
+                                }
+                            }
+                        },
+                        legend: {
+                            enabled: false
+                        },
+                        series: [{
+                                name: 'repuestas',
+                                data: datos0
+
+                            }]
+                    });
+                });
+            } //fin success
+        }); //fin del $.ajax
+
+
+        $.ajax({
+            type: "POST",
+            url: 'Encuestas?accion=resultadosP3&preguntaid=${iter.index}',
+            dataType: 'json',
+            success: function(dat)
+            {
+                categorias3 = dat['0']["datos"];
+
+                chart2 = new Highcharts.Chart({
+                    chart: {
+                        renderTo: 'di2v${pregunta.idpregunta}',
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false
+
+                    },
+                    title: {
+                        text: '${pregunta.pregunta}'
+                    },
+                    tooltip: {
+                        formatter: function() {
+                            return '' +
+                                    this.point.name + ': ' + this.y + ' ';
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                color: '#000000',
+                                connectorColor: '#000000',
+                                formatter: function() {
+                                    var igv = this.percentage;
+                                    igv = igv.toFixed(2);
+                                    return '<b>' + this.point.name + '</b>: ' + igv + ' %';
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                            type: 'pie',
+                            name: 'respuestas',
+                            data: categorias3
+                        }]
+
+
                 });
             } //fin success
         }); //fin del $.ajax

@@ -60,6 +60,7 @@ public class InformeXpreguntaTiempo implements Action {
         int preguntaIndex = 0;
         for (Pregunta pregunta : preguntas) {
             int cantidadPersonas = resultadosFacade.ContarPersonasXPregunta("preguntaIdpregunta", pregunta);
+            cantidadPersonasxPregunta.add(cantidadPersonas);
             pregunta.getRespuestaList().size();
             List<String> resultadosAbiertaPreguntaActual = new ArrayList<String>();
             totalr = 0;

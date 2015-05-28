@@ -69,7 +69,7 @@ public class InformeXpreguntaSemestre implements Action {
         int preguntaIndex = 0;
         for (Pregunta pregunta : preguntas) {
             int cantidadPersonas = resultadosFacade.ContarPersonasXPregunta("preguntaIdpregunta", pregunta);
-            
+            cantidadPersonasxPregunta.add(cantidadPersonas);
             List<String> resultadosAbiertaPreguntaActual = new ArrayList<String>();
             totalr = 0;
             List<String> cantidadRespuestasPreguntaActual = new ArrayList<String>();
