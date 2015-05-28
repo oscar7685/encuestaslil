@@ -586,9 +586,9 @@ public class Encuestas extends HttpServlet {
                         if (!preg.get(indicePregunta).getTipo().equals("6")) {
                             String aux5 = ""
                                     + "["
-                                    +"\"" + preg.get(indicePregunta).getRespuestaList()
+                                    + "\"" + preg.get(indicePregunta).getRespuestaList()
                                     .get(i).getRespuesta().trim()
-                                    + "\" ,"  + aux.get(indicePregunta).get(i)
+                                    + "\" ," + aux.get(indicePregunta).get(i)
                                     + ""
                                     + "],"
                                     + "";
@@ -596,7 +596,7 @@ public class Encuestas extends HttpServlet {
                         } else {
                             String aux5 = ""
                                     + "["
-                                    + "\"" +  preg.get(indicePregunta).getRespuestaList()
+                                    + "\"" + preg.get(indicePregunta).getRespuestaList()
                                     .get(i).getRespuesta().trim()
                                     + "\" ," + aux6.get(indicePregunta).get(i)
                                     + ""
@@ -611,6 +611,64 @@ public class Encuestas extends HttpServlet {
 
                     out.println("[" + aux4 + "]");
 
+                } finally {
+                    out.close();
+                }
+
+            } else if (accion.equals("resultadosP5")) {
+                response.setContentType("application/json");
+
+                String preguntaid = (String) request.getParameter("preguntaid");
+                int indicePregunta = Integer.parseInt(preguntaid);
+                List<List<List>> aux = (List<List<List>>) sesion.getAttribute("cantidadXrespuestaXPreguntaF");
+                List<List<List>> aux6 = (List<List<List>>) sesion.getAttribute("cantidadXrespuestaXPregunta6F");
+
+                List<Pregunta> preg = (List<Pregunta>) sesion.getAttribute("preguntas");
+
+                String aux4 = "{ \"datos\":[";
+
+                try {
+                    for (int i = 0; i < preg.get(indicePregunta).getRespuestaList().size(); i++) {
+                        if (!preg.get(indicePregunta).getTipo().equals("6")) {
+                            String aux5 = ""
+                                    + "{"
+                                    + "name: \"" + preg.get(indicePregunta).getRespuestaList().get(i).getRespuesta().trim()
+                                    + "\" , data:["
+                                    + aux.get(0).get(indicePregunta).get(i)
+                                    + "," + aux.get(1).get(indicePregunta).get(i)
+                                    + "," + aux.get(2).get(indicePregunta).get(i)
+                                    + "," + aux.get(3).get(indicePregunta).get(i)
+                                    + "," + aux.get(4).get(indicePregunta).get(i)
+                                    + "]"
+                                    + ""
+                                    + "},"
+                                    + "";
+                            aux4 += aux5;
+                        } else {
+                            String aux5 = ""
+                                    + "{"
+                                    + "name: \"" + preg.get(indicePregunta).getRespuestaList().get(i).getRespuesta().trim()
+                                    + "\" , data:["
+                                    + aux6.get(0).get(indicePregunta).get(i)
+                                    + "," + aux6.get(1).get(indicePregunta).get(i)
+                                    + "," + aux6.get(2).get(indicePregunta).get(i)
+                                    + "," + aux6.get(3).get(indicePregunta).get(i)
+                                    + "," + aux6.get(4).get(indicePregunta).get(i)
+                                    + "]"
+                                    + ""
+                                    + "},"
+                                    + "";
+                            aux4 += aux5;
+                        }
+
+                    }
+                    aux4 = aux4.substring(0, aux4.length() - 1);
+                    aux4 += "]}";
+
+                    out.println("[" + aux4 + "]");
+
+                }catch(Exception e){
+                    System.out.println(e);
                 } finally {
                     out.close();
                 }
