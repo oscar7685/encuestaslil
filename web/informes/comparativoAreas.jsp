@@ -46,9 +46,12 @@
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script> 
-        <script src="<%=request.getContextPath()%>/assets/js/highcharts.js"></script>
+
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        <%--<script src="<%=request.getContextPath()%>/assets/js/highcharts.js"></script>
         <script src="<%=request.getContextPath()%>/assets/js/highcharts-more.js"></script>
-        <script src="<%=request.getContextPath()%>/assets/js/exporting.js"></script>
+        <script src="<%=request.getContextPath()%>/assets/js/exporting.js"></script>--%>
 
     </head>
 
@@ -205,35 +208,32 @@
             <script src="<%=request.getContextPath()%>/assets/js/bootstrap.min.js"></script> 				<!-- Load Bootstrap -->
             <!-- End loading page level scripts-->
            <!-- <script src="<%=request.getContextPath()%>/assets/plugins/sparklines/jquery.sparklines.min.js"></script>  	<!-- Sparkline -->
-            <script src="<%=request.getContextPath()%>/assets/js/application2.js"></script>
-            <script src="<%=request.getContextPath()%>/assets/js/raphael.min.js"></script> <!-- Load Raphael as Dependency -->
-            <script src="<%=request.getContextPath()%>/assets/js/morris.min.js"></script>  <!-- Load Morris.js -->
+            <!--<script src="<%=request.getContextPath()%>/assets/js/application2.js"></script>-->
+            <!--<script src="<%=request.getContextPath()%>/assets/js/raphael.min.js"></script> <!-- Load Raphael as Dependency -->-->
+            <!--<script src="<%=request.getContextPath()%>/assets/js/morris.min.js"></script>  <!-- Load Morris.js -->-->
 
             <script type="text/javascript">
-                var datosTF1vsTF2, datos9, datos1, datos6, datos0, categorias0, series3, categorias3;
+                var datosTF1vsTF2, datos9, datos1, datos6, datos0, categorias0, series3, categorias3, jota;
                 $(function() {
                 <c:forEach items="${preguntas}" var="pregunta" varStatus="iter">
                     <c:choose>
-                        <c:when test="${pregunta.getTipo() == '9'}">
+                        <c:when test="${pregunta.getTipo() == '9' || pregunta.getTipo() == '1' || pregunta.getTipo() == '0' || pregunta.getTipo() == '6'}">
                     $.ajax({
                         type: "POST",
                         url: 'Encuestas?accion=resultadosP5&preguntaid=${iter.index}',
                         dataType: 'json',
                         success: function(dat)
                         {
-                            categorias0 = dat['0'];
-
-                            console.log("categoria"+categorias0);
-                            var chart;
-                             chart = new Highcharts.Chart({
+                            new Highcharts.Chart({
                                 chart: {
-                                    renderTo: 'div${pregunta.idpregunta}',
-                                    type: 'bar'
+                                    type: 'bar',
+                                    renderTo: 'div${pregunta.idpregunta}'
 
                                 },
                                 title: {
-                                    text: 'Historic World Population by Region'
+                                    text: '${pregunta.pregunta}'
                                 },
+                                
                                 xAxis: {
                                     categories: ['Humanidades y Arte', 'Salud y servicios sociales', 'Ciencias Sociales, Educación Comercial y Derecho', 'Ciencias', 'Ingenierías, industria y construcción'],
                                     title: {
@@ -243,7 +243,7 @@
                                 yAxis: {
                                     min: 0,
                                     title: {
-                                        text: 'Population (millions)',
+                                        text: 'Número de personas',
                                         align: 'high'
                                     },
                                     labels: {
@@ -251,7 +251,7 @@
                                     }
                                 },
                                 tooltip: {
-                                    valueSuffix: ' millions'
+                                    valueSuffix: ' personas'
                                 },
                                 plotOptions: {
                                     bar: {
@@ -264,8 +264,8 @@
                                     layout: 'vertical',
                                     align: 'right',
                                     verticalAlign: 'top',
-                                    x: -40,
-                                    y: 100,
+                                    x: 10,
+                                    y: 20,
                                     floating: true,
                                     borderWidth: 1,
                                     backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
@@ -274,68 +274,11 @@
                                 credits: {
                                     enabled: false
                                 },
-                                series: categorias0
+                                series: dat
+        
                             });
+                        } //fin success
 
-                        }, //fin success
-                        error: function(dat){
-                        console.log(dat[0]['datos']);
-                        categorias0 = dat[0]['datos'];
-
-                            var chart;
-                             chart = new Highcharts.Chart({
-                                chart: {
-                                    renderTo: 'div${pregunta.idpregunta}',
-                                    type: 'bar'
-
-                                },
-                                title: {
-                                    text: 'Historic World Population by Region'
-                                },
-                                xAxis: {
-                                    categories: ['Humanidades y Arte', 'Salud y servicios sociales', 'Ciencias Sociales, Educación Comercial y Derecho', 'Ciencias', 'Ingenierías, industria y construcción'],
-                                    title: {
-                                        text: null
-                                    }
-                                },
-                                yAxis: {
-                                    min: 0,
-                                    title: {
-                                        text: 'Population (millions)',
-                                        align: 'high'
-                                    },
-                                    labels: {
-                                        overflow: 'justify'
-                                    }
-                                },
-                                tooltip: {
-                                    valueSuffix: ' millions'
-                                },
-                                plotOptions: {
-                                    bar: {
-                                        dataLabels: {
-                                            enabled: true
-                                        }
-                                    }
-                                },
-                                legend: {
-                                    layout: 'vertical',
-                                    align: 'right',
-                                    verticalAlign: 'top',
-                                    x: -40,
-                                    y: 100,
-                                    floating: true,
-                                    borderWidth: 1,
-                                    backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-                                    shadow: true
-                                },
-                                credits: {
-                                    enabled: false
-                                },
-                                series: categorias0
-                            });
-                        
-                        }
                     }); //fin del $.ajax
                         </c:when>
                     </c:choose>

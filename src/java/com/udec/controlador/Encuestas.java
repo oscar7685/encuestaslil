@@ -625,15 +625,14 @@ public class Encuestas extends HttpServlet {
 
                 List<Pregunta> preg = (List<Pregunta>) sesion.getAttribute("preguntas");
 
-                String aux4 = "{ \"datos\":[";
+                String aux4 = "[";
 
                 try {
                     for (int i = 0; i < preg.get(indicePregunta).getRespuestaList().size(); i++) {
                         if (!preg.get(indicePregunta).getTipo().equals("6")) {
-                            String aux5 = ""
-                                    + "{"
-                                    + "name: \"" + preg.get(indicePregunta).getRespuestaList().get(i).getRespuesta().trim()
-                                    + "\" , data:["
+                            String aux5 = "{"
+                                    + "\"name\": \"" + preg.get(indicePregunta).getRespuestaList().get(i).getRespuesta().trim()
+                                    + "\" , \"data\":["
                                     + aux.get(0).get(indicePregunta).get(i)
                                     + "," + aux.get(1).get(indicePregunta).get(i)
                                     + "," + aux.get(2).get(indicePregunta).get(i)
@@ -645,10 +644,9 @@ public class Encuestas extends HttpServlet {
                                     + "";
                             aux4 += aux5;
                         } else {
-                            String aux5 = ""
-                                    + "{"
-                                    + "name: \"" + preg.get(indicePregunta).getRespuestaList().get(i).getRespuesta().trim()
-                                    + "\" , data:["
+                            String aux5 = "{"
+                                    + "\"name\": \"" + preg.get(indicePregunta).getRespuestaList().get(i).getRespuesta().trim()
+                                    + "\" , \"data\":["
                                     + aux6.get(0).get(indicePregunta).get(i)
                                     + "," + aux6.get(1).get(indicePregunta).get(i)
                                     + "," + aux6.get(2).get(indicePregunta).get(i)
@@ -663,14 +661,15 @@ public class Encuestas extends HttpServlet {
 
                     }
                     aux4 = aux4.substring(0, aux4.length() - 1);
-                    aux4 += "]}";
+                    aux4 += "]";
 
-                    out.println("[" + aux4 + "]");
+                    out.print(aux4);
+                    
 
-                }catch(Exception e){
-                    System.out.println(e);
+                } catch (Exception e) {
+                    System.out.println("ha ocurrido un error");
                 } finally {
-                    out.close();
+                    //out.close();
                 }
 
             } else if (accion.equals("resultadosP2")) {
