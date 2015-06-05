@@ -55,6 +55,7 @@ public class InformeXpreguntaSimple implements Action {
         List<String> totalrespuestas = new ArrayList<String>();
         List<List<String>> cantidadXrespuestaXPregunta = new ArrayList<List<String>>();
         List<List<String>> cantidadXrespuestaXPregunta6 = new ArrayList<List<String>>();
+        List<List<String>> respuestasOtroXPregunta = new ArrayList<List<String>>();
 
         List<List<List<String>>> cantidadXOrdenXrespuestaXPregunta = new ArrayList<List<List<String>>>();
         int preguntaIndex = 0;
@@ -65,6 +66,7 @@ public class InformeXpreguntaSimple implements Action {
             totalr = 0;
             List<String> cantidadRespuestasPreguntaActual = new ArrayList<String>();
             List<String> cantidadRespuestasPreguntaActual6 = new ArrayList<String>();
+            List<String> respuestasPreguntaActual = new ArrayList<String>();
             List<List<String>> cantidadOrdenRespuestasPreguntaActual = new ArrayList<List<String>>();
             if ("0".equals(pregunta.getTipo())) {
                 //Preguntas tipo 0  seleccion multiple unica respuesta
@@ -79,7 +81,12 @@ public class InformeXpreguntaSimple implements Action {
                 if ("true".equals(pregunta.getOtro())) {
 
                     List<Resultados> resultados2 = resultadosFacade.findByList2Especial("preguntaIdpregunta", pregunta);
+                    String otras = "";
                     cantidadRespuestasPreguntaActual.add("" + resultados2.size());
+                    for (Resultados resultados : resultados2) {
+                        otras += " '" + resultados.getValor() + "' ";
+                    }
+                    respuestasPreguntaActual.add("" + otras);
                     totalr += resultados2.size();
 
                 }
@@ -100,6 +107,13 @@ public class InformeXpreguntaSimple implements Action {
                             List<Resultados> CantidadOrdenresultados = resultadosFacade.findByList3("preguntaIdpregunta", pregunta, "respuestaIdrespuesta", respuesta, "orden", i + 1);
                             cantidadOrdenRespuestasActual.add("" + CantidadOrdenresultados.size());
                         }
+
+                        List<Resultados> resultados3 = resultadosFacade.findByList2Especial("preguntaIdpregunta", pregunta);
+                        String otras = "";
+                        for (Resultados resultados0 : resultados3) {
+                            otras += " '" + resultados0.getValor() + "' ";
+                        }
+                        respuestasPreguntaActual.add("" + otras);
 
                     } else {
 
@@ -189,21 +203,27 @@ public class InformeXpreguntaSimple implements Action {
             if (!"6".equals(pregunta.getTipo())) {
                 cantidadRespuestasPreguntaActual6.add("NA");
             }
+            if (respuestasPreguntaActual.isEmpty()) {
+                respuestasPreguntaActual.add("NA");
+            }
 
             preguntaIndex++;
             totalrespuestas.add("" + totalr);
             cantidadXrespuestaXPregunta.add(cantidadRespuestasPreguntaActual);
             cantidadXrespuestaXPregunta6.add(cantidadRespuestasPreguntaActual6);
             cantidadXOrdenXrespuestaXPregunta.add(cantidadOrdenRespuestasPreguntaActual);
+            respuestasOtroXPregunta.add(respuestasPreguntaActual);
             //cantidadXOrdenXrespuestaXPregunta.add(cantidadOrdenRespuestasPreguntaActual6);
 
         }
+        System.out.println("pasó por aca!!");
         sesion.setAttribute("cantidadPersonasXpregunta", cantidadPersonasxPregunta);
         sesion.setAttribute("preguntas", preguntas);
         sesion.setAttribute("totalrespuestas", totalrespuestas);
         sesion.setAttribute("cantidadXrespuestaXPregunta", cantidadXrespuestaXPregunta);
         sesion.setAttribute("cantidadXrespuestaXPregunta6", cantidadXrespuestaXPregunta6); //tipo 6
         sesion.setAttribute("cantidadXOrdenXrespuestaXPregunta", cantidadXOrdenXrespuestaXPregunta);
+        sesion.setAttribute("respuestasOtroXPregunta", respuestasOtroXPregunta);
         sesion.setAttribute("RespuestasPreguntasAbiertas", RespuestasPreguntasAbiertas);
         sesion.setAttribute("fuente", para);
         sesion.setAttribute("facultades", facultadFacade.findAll());

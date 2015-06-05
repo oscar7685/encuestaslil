@@ -171,8 +171,10 @@
                                                                                 ${otraStatus2.index+1}: ${cantidadXOrdenXrespuestaXPregunta.get(iter.index).get(aux5+1).get(otraStatus2.index)}
                                                                                 <c:set var="aux7" value="${otraStatus2.index}"></c:set>
                                                                             </c:forEach>
-                                                                            ${aux7+2}: ${cantidadXOrdenXrespuestaXPregunta.get(iter.index).get(aux5+1).get(aux7+1)}
-                                                                        </c:when>
+                                                                                ${aux7+2}: ${cantidadXOrdenXrespuestaXPregunta.get(iter.index).get(aux5+1).get(aux7+1)}
+                                                                            <br/>    
+                                                                            Respuestas Otro:${respuestasOtroXPregunta.get(iter.index).get(0)}<br/>
+                                                                         </c:when>
                                                                     </c:choose>
                                                                     <br/>    
 
